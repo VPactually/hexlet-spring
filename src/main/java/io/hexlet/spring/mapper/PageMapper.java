@@ -7,7 +7,7 @@ import io.hexlet.spring.model.Page;
 import org.mapstruct.*;
 
 @Mapper(
-        uses = {JsonNullableMapper.class},
+        uses = {JsonNullableMapper.class, ReferenceMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
@@ -19,5 +19,6 @@ public abstract class PageMapper {
     @Mapping(source = "assignee.id", target = "assigneeId")
     public abstract PageDTO map(Page model);
 
+    @Mapping(source = "assigneeId", target = "assignee")
     public abstract void update(PageUpdateDTO dto, @MappingTarget Page model);
 }

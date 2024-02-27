@@ -18,11 +18,11 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "guests")
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class User {
+public class User implements BaseEntity{
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
