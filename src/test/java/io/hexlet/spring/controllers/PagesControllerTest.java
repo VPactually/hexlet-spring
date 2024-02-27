@@ -1,4 +1,4 @@
-package io.hexlet.spring.controller.api;
+package io.hexlet.spring.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hexlet.spring.mapper.PageMapper;

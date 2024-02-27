@@ -29,8 +29,8 @@ public class Page {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     private User assignee;
 
     @LastModifiedDate

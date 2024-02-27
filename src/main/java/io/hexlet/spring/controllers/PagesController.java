@@ -32,12 +32,11 @@ public class PagesController {
     private PageMapper pageMapper;
 
     @GetMapping
-    public ResponseEntity<List<Page>> index(@RequestParam(defaultValue = "1") int page) {
-        var result = pageRepository.findAll(PageRequest.of(page - 1, 5)).stream().toList();
+    @ResponseStatus(HttpStatus.OK)
+    public List<PageDTO> index(@RequestParam(defaultValue = "1") int page) {
+        var result = pageRepository.findAll(PageRequest.of(page - 1, 5));
 
-        return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(pageRepository.count()))
-                .body(result);
+        return result.stream().map(p -> pageMapper.map(p)).toList();
     }
 
     @GetMapping("/{id}")

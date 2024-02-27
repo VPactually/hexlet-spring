@@ -1,4 +1,4 @@
-package io.hexlet.spring.controller.api;
+package io.hexlet.spring.controllers;
 
 import io.hexlet.spring.mapper.UserMapper;
 import io.hexlet.spring.model.User;

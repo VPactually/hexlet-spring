@@ -39,7 +39,7 @@ public class User {
     private LocalDate createdAt;
 
     // BEGIN
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Page> pages = new ArrayList<>();
 
     public void addPage(Page page) {
