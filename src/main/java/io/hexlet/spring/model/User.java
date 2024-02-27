@@ -47,7 +47,7 @@ public class User {
         page.setAssignee(this);
     }
 
-    public void deleteTask(Page page) {
+    public void deletePage(Page page) {
         pages.remove(page);
         page.setAssignee(null);
     }
