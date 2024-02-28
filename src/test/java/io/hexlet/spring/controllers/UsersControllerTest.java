@@ -103,6 +103,7 @@ class UsersControllerTest {
         assertThat(user).isNotNull();
         assertThat(user.getName()).isEqualTo(testUser.getName());
         assertThat(user.getEmail()).isEqualTo(testUser.getEmail());
+        assertThat(user.getPasswordDigest()).isNotEqualTo(testUser.getPasswordDigest());
     }
 
 
