@@ -1,7 +1,6 @@
 package io.hexlet.spring.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class Page implements BaseEntity {
+public class PageModel implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

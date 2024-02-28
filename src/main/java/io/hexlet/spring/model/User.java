@@ -11,9 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -22,7 +25,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class User implements BaseEntity{
+public class User implements UserDetails, BaseEntity{
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -38,18 +41,50 @@ public class User implements BaseEntity{
     @CreatedDate
     private LocalDate createdAt;
 
-    // BEGIN
     @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Page> pages = new ArrayList<>();
+    private List<PageModel> pageModels = new ArrayList<>();
 
-    public void addPage(Page page) {
-        pages.add(page);
-        page.setAssignee(this);
+    @NotBlank
+    private String passwordDigest;
+
+    public void addPage(PageModel pageModel) {
+        pageModels.add(pageModel);
+        pageModel.setAssignee(this);
     }
 
-    public void deletePage(Page page) {
-        pages.remove(page);
-        page.setAssignee(null);
+    @Override
+    public String getPassword() {
+        return passwordDigest;
     }
-    // END
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<GrantedAuthority>();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
 }

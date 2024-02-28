@@ -2,7 +2,9 @@ logging:
   level:
     root: WARN
 
+
 spring:
+
   jpa:
     generate-ddl: true
     show-sql: true
@@ -17,6 +19,11 @@ spring:
     driver-class-name: org.h2.Driver
     username: user
     password:
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+
 
 
 server:

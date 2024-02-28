@@ -4,6 +4,7 @@ import io.hexlet.spring.mapper.UserMapper;
 import io.hexlet.spring.model.User;
 import io.hexlet.spring.repositories.UserRepository;
 import io.hexlet.spring.util.ModelGenerator;
+import io.hexlet.spring.util.UserUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,17 +47,23 @@ class UsersControllerTest {
     @Autowired
     private ModelGenerator modelGenerator;
 
+    @Autowired
+    private UserUtils userUtils;
+
     private User testUser;
+
+    private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
     @BeforeEach
     public void setUp() {
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
+        token = jwt().jwt(builder -> builder.subject(userUtils.getTestUser().getEmail()));
     }
 
     @Test
     public void testIndex() throws Exception {
         userRepository.save(testUser);
-        var result = mockMvc.perform(get("/users"))
+        var result = mockMvc.perform(get("/users").with(token))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -67,7 +76,7 @@ class UsersControllerTest {
 
         userRepository.save(testUser);
 
-        var request = get("/users/{id}", testUser.getId());
+        var request = get("/users/{id}", testUser.getId()).with(token);
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
@@ -81,11 +90,10 @@ class UsersControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        var dto = mapper.map(testUser);
 
         var request = post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(dto));
+                .content(om.writeValueAsString(testUser));
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated());
@@ -97,12 +105,14 @@ class UsersControllerTest {
         assertThat(user.getEmail()).isEqualTo(testUser.getEmail());
     }
 
+
+
     @Test
     public void testCreateWithNotValidEmail() throws Exception {
         var dto = mapper.map(testUser);
         dto.setEmail("qwert");
 
-        var request = post("/users")
+        var request = post("/users").with(token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 

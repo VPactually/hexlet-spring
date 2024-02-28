@@ -3,7 +3,7 @@ package io.hexlet.spring.mapper;
 import io.hexlet.spring.dto.page.PageCreateDTO;
 import io.hexlet.spring.dto.page.PageDTO;
 import io.hexlet.spring.dto.page.PageUpdateDTO;
-import io.hexlet.spring.model.Page;
+import io.hexlet.spring.model.PageModel;
 import org.mapstruct.*;
 
 @Mapper(
@@ -14,11 +14,11 @@ import org.mapstruct.*;
 )
 public abstract class PageMapper {
     @Mapping(target = "assignee.id", source = "assigneeId")
-    public abstract Page map(PageCreateDTO dto);
+    public abstract PageModel map(PageCreateDTO dto);
 
     @Mapping(source = "assignee.id", target = "assigneeId")
-    public abstract PageDTO map(Page model);
+    public abstract PageDTO map(PageModel model);
 
     @Mapping(source = "assigneeId", target = "assignee")
-    public abstract void update(PageUpdateDTO dto, @MappingTarget Page model);
+    public abstract void update(PageUpdateDTO dto, @MappingTarget PageModel model);
 }
