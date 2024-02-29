@@ -103,6 +103,8 @@ class UsersControllerTest {
         assertThat(user).isNotNull();
         assertThat(user.getName()).isEqualTo(testUser.getName());
         assertThat(user.getEmail()).isEqualTo(testUser.getEmail());
+        System.out.println(user.getPasswordDigest().hashCode());
+        System.out.println(testUser.getPasswordDigest().hashCode());
         assertThat(user.getPasswordDigest()).isNotEqualTo(testUser.getPasswordDigest());
     }
 

@@ -3,10 +3,9 @@ package io.hexlet.spring.mapper;
 import io.hexlet.spring.dto.user.UserCreateDTO;
 import io.hexlet.spring.dto.user.UserDTO;
 import io.hexlet.spring.model.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
@@ -14,7 +13,16 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
-    
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public abstract User map(UserCreateDTO dto);
     public abstract UserDTO map(User model);
+
+    @BeforeMapping
+    public void encryptPassword(UserCreateDTO data) {
+        var password = data.getPasswordDigest();
+        data.setPasswordDigest(passwordEncoder.encode(password));
+    }
 }
